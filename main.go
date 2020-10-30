@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func main(){
+func main() {
 
 	// Logger Configuration
 	logger := log.New(os.Stdout, "datahow-api ", log.LstdFlags)
@@ -21,7 +21,7 @@ func main(){
 	metricsHandler := handlers.NewMetrics(logger)
 	logsHandler := handlers.NewLogs(logger)
 	jsonResponseHandler := handlers.NewJsonResponse(logger)
-	
+
 	// Gorilla Mux Handler config
 	sm := mux.NewRouter()
 	sm.Use(jsonResponseHandler.MiddlewareAddJSONHeader)
@@ -54,20 +54,20 @@ func main(){
 		WriteTimeout: 1 * time.Second,
 	}
 
-	// Startup server 
-	go func(){
+	// Startup server
+	go func() {
 		logger.Println("\nStarting Metrics Server on port " + metricsServer.Addr)
 
 		err := metricsServer.ListenAndServe()
-		if err != nil{
+		if err != nil {
 			logger.Printf("Error starting server : %s\n", err)
 			os.Exit(1)
 		}
 	}()
-	
+
 	logger.Println("\nStarting Logs Server on port " + logsServer.Addr)
 	err := logsServer.ListenAndServe()
-	if err != nil{
+	if err != nil {
 		logger.Printf("Error starting server : %s\n", err)
 		os.Exit(1)
 	}

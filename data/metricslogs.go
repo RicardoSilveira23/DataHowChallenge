@@ -16,7 +16,7 @@ type MetricsLog struct {
 type MetricsLogs []*MetricsLog
 
 // Unique Ids
-type UniqueIPs struct{
+type UniqueIPs struct {
 	UniqueIPAddresses int `json:"unique_ip_addresses"`
 }
 
@@ -50,32 +50,31 @@ func getNextID() int {
 	return ml.ID + 1
 }
 
-
 // Simple get All metrics
 func GetMetrics() MetricsLogs {
 	return metricsLogList
 }
 
 // Calc unique IP Addresses
-func GetUniqueIPAdrresses() UniqueIPs{
+func GetUniqueIPAdrresses() UniqueIPs {
 	var unique []*MetricsLog
 
-	for _, i := range metricsLogList{
+	for _, i := range metricsLogList {
 		skip := false
-		for _, u := range unique{
-			if i.IP == u.IP{
+		for _, u := range unique {
+			if i.IP == u.IP {
 				skip = true
 				break
 			}
 		}
 		if !skip {
-			unique = append(unique,i)
+			unique = append(unique, i)
 		}
 	}
-	
+
 	uIPs := UniqueIPs{
 		UniqueIPAddresses: len(unique),
-	};
+	}
 
 	return uIPs
 }
