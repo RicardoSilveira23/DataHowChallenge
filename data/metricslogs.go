@@ -57,6 +57,15 @@ func GetMetrics() MetricsLogs {
 
 // Calc unique IP Addresses
 func GetUniqueIPAdrresses() UniqueIPs {
+
+	uIPs := UniqueIPs{
+		UniqueIPAddresses: GetNumberOfUniqueIPs(metricsLogList),
+	}
+
+	return uIPs
+}
+
+func GetNumberOfUniqueIPs(metricsList []*MetricsLog) int {
 	var unique []*MetricsLog
 
 	for _, i := range metricsLogList {
@@ -72,11 +81,7 @@ func GetUniqueIPAdrresses() UniqueIPs {
 		}
 	}
 
-	uIPs := UniqueIPs{
-		UniqueIPAddresses: len(unique),
-	}
-
-	return uIPs
+	return len(unique)
 }
 
 // Mock Data
