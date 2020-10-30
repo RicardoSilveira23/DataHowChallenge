@@ -15,6 +15,11 @@ type MetricsLog struct {
 // Metric Logs
 type MetricsLogs []*MetricsLog
 
+// Unique Ids
+type UniqueIPs struct{
+	UniqueIPAddresses int `json:"unique_ip_addresses"`
+}
+
 // FromJSON decoding
 func (ml *MetricsLog) FromJSON(r io.Reader) error {
 	e := json.NewDecoder(r)
@@ -25,6 +30,12 @@ func (ml *MetricsLog) FromJSON(r io.Reader) error {
 func (ml *MetricsLogs) ToJSON(w io.Writer) error {
 	e := json.NewEncoder(w)
 	return e.Encode(ml)
+}
+
+// ToJSON enconding
+func (ui *UniqueIPs) ToJSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(ui)
 }
 
 // Add MetricsLog
@@ -39,9 +50,34 @@ func getNextID() int {
 	return ml.ID + 1
 }
 
+
 // Simple get All metrics
 func GetMetrics() MetricsLogs {
 	return metricsLogList
+}
+
+// Calc unique IP Addresses
+func GetUniqueIPAdrresses() UniqueIPs{
+	var unique []*MetricsLog
+
+	for _, i := range metricsLogList{
+		skip := false
+		for _, u := range unique{
+			if i.IP == u.IP{
+				skip = true
+				break
+			}
+		}
+		if !skip {
+			unique = append(unique,i)
+		}
+	}
+	
+	uIPs := UniqueIPs{
+		UniqueIPAddresses: len(unique),
+	};
+
+	return uIPs
 }
 
 // Mock Data

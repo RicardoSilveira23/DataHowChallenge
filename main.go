@@ -20,12 +20,15 @@ func main(){
 	// Handlers Configuration
 	metricsHandler := handlers.NewMetrics(logger)
 	logsHandler := handlers.NewLogs(logger)
+	jsonResponseHandler := handlers.NewJsonResponse(logger)
 	
 	// Gorilla Mux Handler config
 	sm := mux.NewRouter()
+	sm.Use(jsonResponseHandler.MiddlewareAddJSONHeader)
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
-	getRouter.HandleFunc("/metrics", metricsHandler.GetMetrics)
+	getRouter.HandleFunc("/allmetrics", metricsHandler.GetMetrics)
+	getRouter.HandleFunc("/metrics", metricsHandler.GetUniqueIPs)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
 	postRouter.HandleFunc("/logs", logsHandler.AddMetricsLog)
